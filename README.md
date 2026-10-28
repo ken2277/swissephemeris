@@ -19,3 +19,5 @@ AGPL option. The rest of the site (pages, contact form, map proxy) is not includ
 
 These files are copied from the site's source repository. They originally run inside a
 Flask app whose factory (`create_app`) and `config.py` are not included here.
+
+Copyright (c) 2026 Ken Kusuki

@@ -1,3 +1,5 @@
+# Copyright (c) 2026 Ken Kusuki
+# SPDX-License-Identifier: AGPL-3.0-only
 # app/api_routes.py
 #
 # Excerpt of app/routes.py from the moonsign-astrology.com site, containing only

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 Ken Kusuki
+# SPDX-License-Identifier: AGPL-3.0-only
 # ============================================================================
 # download_ephemeris.sh
 #
