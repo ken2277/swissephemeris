@@ -19,22 +19,6 @@ bp = Blueprint("main", __name__)
 
 @bp.post("/api/natal-chart")
 def api_natal_chart():
-    """
-    ネイタルチャートの計算をお願いするための、APIの入り口です。
-
-    ブラウザ側のJavaScript(static/js/main.js)が、
-    お客さんが入力した「生年月日・時刻・場所」を、
-    このURLに向けて "POST"(データを送って処理をお願いする方法)します。
-
-    ここでの仕事は3つだけです。
-      1. 送られてきたデータの形が正しいかを確認する(バリデーション)
-      2. 正しければ、計算係(natal_chart.py)に計算をお願いする
-      3. 計算結果(または、エラーメッセージ)を、JSON形式で送り返す
-    """
-    # "request.get_json()" で、お客さんのブラウザから送られてきた
-    # JSONデータ(データの入った小包のようなもの)を取り出します。
-    # "silent=True" は、「もしJSONの形が壊れていても、エラーで
-    # プログラムを止めずに、代わりに None を返してください」という指定です。
     payload = request.get_json(silent=True)
 
     if payload is None or not isinstance(payload, dict):
@@ -46,13 +30,8 @@ def api_natal_chart():
         latitude = _parse_float(payload.get("latitude"), "latitude")
         longitude = _parse_float(payload.get("longitude"), "longitude")
     except ValueError as exc:
-        # お客さんの入力ミスは、お客さんに直してもらう必要があるエラーなので
-        # "400 Bad Request"(あなたのお願いの内容がおかしいです)という
-        # 意味の番号をつけて返します。
         return jsonify({"error": str(exc)}), 400
 
-    # 場所の名前(例: "東京都" )は、無くても計算自体はできるので必須にはせず、
-    # 長すぎる入力だけ切り詰めて安全にしています。
     place_name = payload.get("place_name")
     if place_name is not None:
         place_name = str(place_name)[:200]
@@ -76,16 +55,7 @@ def api_natal_chart():
     return jsonify(result)
 
 
-
 def _parse_date(value) -> datetime.date:
-    """
-    "1990-05-15" のような文字列を、Pythonが日付として扱える
-    datetime.date という形に変換します。
-
-    形式が違っていたり、そもそも値が無かったりした場合は、
-    お客さんに分かりやすい日本語のエラーメッセージをつけて、
-    ValueError(値がおかしい、というエラー)を発生させます。
-    """
     if not value:
         raise ValueError("Please provide a birth date (birth_date).")
     try:
@@ -95,7 +65,6 @@ def _parse_date(value) -> datetime.date:
 
 
 def _parse_time(value) -> datetime.time:
-    """"08:30" のような文字列を、datetime.time という形に変換します。"""
     if not value:
         raise ValueError("Please provide a birth time (birth_time).")
     try:
@@ -105,7 +74,6 @@ def _parse_time(value) -> datetime.time:
 
 
 def _parse_float(value, field_name: str) -> float:
-    """緯度・経度など、数値として送られてくるべき値を、安全に float(小数)に変換します。"""
     if value is None or value == "":
         raise ValueError(f"Please provide {field_name}.")
     try:
