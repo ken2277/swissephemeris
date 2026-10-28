@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+ephe/*.se1
+ephe/*.se2
+ephe/*.eph
+.env
